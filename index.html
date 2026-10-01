@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Barbería San Andrés — Turnos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --verde:#0C2340; --crema:#F5F7FA; --oro:#3372F0; --vino:#E33A3A;
+  --verde-2:#15335C; --linea: rgba(245,247,250,.16); --azul:#1B4F8C;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:inherit;}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+html,body{height:100%;}
+body{margin:0;background:radial-gradient(120% 90% at 15% -10%,#173B6B 0%,var(--verde) 55%);color:var(--crema);font-family:'Work Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,.brand{font-family:'Fraunces',serif;}
+.wrap{max-width:520px;margin:0 auto;padding:28px 20px 40px;}
+header{margin-bottom:12px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+.brand{font-size:32px;font-weight:700;letter-spacing:.2px;margin:0;}
+.brand em{font-style:normal;color:var(--oro);}
+.header-row{display:flex;gap:14px;align-items:center;}
+.header-centro{flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;}
+.header-centro .header-row{width:100%;justify-content:center;gap:20px;}
+.header-centro .pole{height:88px;}
+.tijerapeine{width:40px;height:88px;flex:0 0 auto;}
+.titulo-centro{text-align:center;}
+.brand-top{display:block;font-size:18px;font-weight:600;letter-spacing:.38em;text-transform:uppercase;padding-left:.38em;margin-bottom:2px;color:var(--crema);}
+.header-centro .brand{font-size:36px;line-height:1.1;}
+.pole{position:relative;flex:0 0 auto;width:17px;height:64px;border-radius:9px;
+  background-image:repeating-linear-gradient(-45deg,var(--vino) 0 10px,var(--crema) 10px 20px,var(--oro) 20px 30px);
+  background-size:42px 42px;animation:girarpole .9s linear infinite;
+  box-shadow:0 0 0 1px rgba(0,0,0,.25),0 2px 10px rgba(0,0,0,.3);}
+.pole::before,.pole::after{content:'';position:absolute;left:-2px;right:-2px;height:7px;background:#DADFE5;border-radius:3px;box-shadow:0 1px 2px rgba(0,0,0,.3);}
+.pole::before{top:-4px;}
+.pole::after{bottom:-4px;}
+@keyframes girarpole{from{background-position:0 0;}to{background-position:42px 0;}}
+@media (prefers-reduced-motion: reduce){.pole{animation:none;}}
+.sub{color:var(--crema);opacity:.65;font-size:14px;margin-top:6px;line-height:1.5;}
+.linkchico{background:none;border:1px solid var(--linea);color:var(--crema);opacity:.7;font-size:12px;padding:7px 10px;border-radius:20px;cursor:pointer;white-space:nowrap;font-family:'Work Sans';}
+h2.tit{font-size:15px;font-weight:500;margin:0 0 10px;opacity:.75;letter-spacing:.3px;}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;margin:0 0 4px;scrollbar-width:none;}
+.chips::-webkit-scrollbar{display:none;}
+.chip{flex:0 0 auto;background:var(--verde-2);border:1px solid var(--linea);border-radius:10px;padding:10px 14px;text-align:center;cursor:pointer;min-width:58px;transition:background .15s,border-color .15s;}
+.chip .d{font-size:11px;opacity:.6;text-transform:lowercase;}
+.chip .n{font-size:19px;font-weight:600;font-family:'Fraunces',serif;}
+.chip.sel{background:var(--oro);border-color:var(--oro);color:#fff;}
+.chip.sel .d{opacity:.85;}
+.barbchip{min-width:auto;padding:9px 16px;font-size:14px;font-family:'Work Sans';display:inline-flex;align-items:center;gap:7px;}
+.barbchip.add{opacity:.6;border-style:dashed;}
+.swatch{width:28px;height:28px;padding:0;min-width:28px;border-radius:50%;}
+.swatch.sel{box-shadow:0 0 0 2px var(--verde),0 0 0 4px var(--oro);}
+section.franja{margin-top:24px;}
+.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.slot{border:1px solid var(--linea);background:transparent;color:var(--crema);border-radius:8px;padding:11px 4px;font-size:14px;font-family:'Work Sans';cursor:pointer;transition:background .15s,border-color .15s,opacity .15s;}
+.slot:hover:not(:disabled){border-color:var(--oro);}
+.slot.ocupado{opacity:.28;text-decoration:line-through;cursor:not-allowed;}
+.slot.propio{background:var(--vino);border-color:var(--vino);color:#fff;}
+.vacio{opacity:.5;font-size:14px;padding:14px 0;}
+.sena{margin-top:22px;border:1px solid var(--linea);border-radius:10px;padding:13px 15px;font-size:13px;opacity:.9;line-height:1.5;background:rgba(51,114,240,.08);}
+.sena b{color:var(--oro);}
+.franjafoot{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px;}
+.franjafoot .linkchico{flex:1 1 40%;padding:12px;border-radius:9px;font-size:13px;}
+.cta-cat{background:rgba(245,247,250,.1);border-color:var(--crema);color:var(--crema);opacity:1;font-weight:600;}
+.video-item{margin-bottom:18px;}
+.video-item video{width:100%;max-height:320px;border-radius:10px;background:#000;display:block;}
+.video-item .vt{font-weight:600;margin-top:7px;font-size:14px;}
+.video-item .vb{font-size:13px;opacity:.7;margin-top:2px;}
+.cta-curso{background:rgba(227,58,58,.14);border-color:var(--vino);color:var(--crema);opacity:1;font-weight:600;}
+.cta-curso svg{color:var(--vino);}
+.cta-promo{background:rgba(51,114,240,.18);border-color:var(--oro);color:var(--crema);opacity:1;font-weight:600;}
+.cta-promo svg{color:#7FB0FF;}
+.promo-item{border:1px solid var(--linea);border-radius:10px;padding:12px 14px;margin-bottom:8px;}
+.hoja .promo-item{border-color:rgba(12,35,64,.18);}
+.promo-item .pt{font-family:'Fraunces',serif;font-size:17px;font-weight:600;}
+.promo-item .pd{font-size:14px;opacity:.75;margin-top:3px;line-height:1.4;}
+.promo-item .pv{font-size:12px;margin-top:6px;color:var(--vino);font-weight:600;}
+.redes,.pagos{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
+.rotulo{margin-top:26px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.7;font-weight:600;}
+.rotulo+.redes,.rotulo+.pagos{margin-top:10px;}
+.badge{display:flex;align-items:center;gap:7px;border:1px solid var(--linea);border-radius:20px;padding:7px 12px 7px 8px;font-size:12px;opacity:.85;text-decoration:none;color:var(--crema);}
+.badge svg{width:20px;height:20px;flex:0 0 auto;}
+.foot{margin-top:26px;font-size:12px;opacity:.4;text-align:center;}
+.overlay{position:fixed;inset:0;background:rgba(6,14,28,.75);display:none;align-items:flex-end;justify-content:center;z-index:10;}
+.overlay.on{display:flex;}
+.hoja{background:var(--crema);color:var(--verde);width:100%;max-width:520px;border-radius:18px 18px 0 0;padding:24px 22px calc(26px + env(safe-area-inset-bottom,0px));max-height:85vh;overflow-y:auto;}
+.hoja h3{margin:0 0 2px;font-size:20px;}
+.hoja .cuando{opacity:.6;font-size:14px;margin-bottom:16px;}
+.campo{margin-bottom:14px;}
+.campo label{display:block;font-size:12px;opacity:.65;margin-bottom:5px;}
+.campo input,.campo select{width:100%;padding:11px 12px;border-radius:8px;border:1px solid rgba(12,35,64,.2);font-size:15px;font-family:'Work Sans';background:#fff;color:var(--verde);}
+.campo input:focus,.campo select:focus{outline:2px solid var(--oro);outline-offset:1px;}
+.senainfo{background:rgba(227,58,58,.08);border:1px solid rgba(227,58,58,.25);border-radius:8px;padding:10px 12px;font-size:13px;margin-bottom:16px;line-height:1.5;}
+.alias-copy{display:inline-flex;align-items:center;gap:7px;background:rgba(51,114,240,.16);border:1px dashed var(--oro);color:var(--verde);font-weight:700;font-size:15px;padding:7px 12px;border-radius:8px;font-family:'Work Sans';cursor:pointer;margin-top:4px;}
+.alias-copy:active{background:rgba(51,114,240,.3);}
+.alias-copy svg{flex:none;}
+.botones{display:flex;gap:10px;margin-top:18px;}
+.btn{flex:1;padding:13px;border-radius:9px;border:none;font-size:15px;font-family:'Work Sans';font-weight:600;cursor:pointer;}
+.btn.si{background:var(--vino);color:#fff;}
+.btn.no{background:transparent;color:var(--verde);opacity:.55;}
+.aviso{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);background:var(--oro);color:#fff;padding:12px 20px;border-radius:9px;font-size:14px;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;z-index:20;font-weight:600;max-width:88vw;text-align:center;}
+.aviso.on{opacity:1;transform:translateX(-50%) translateY(0);}
+.turno-item{border:1px solid var(--linea);border-radius:10px;padding:12px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.turno-item .h{font-family:'Fraunces',serif;font-size:17px;color:var(--oro);min-width:52px;}
+.turno-item .c{font-size:13px;opacity:.55;}
+.turno-item.nuevo{border-color:var(--vino);background:rgba(227,58,58,.08);}
+.buzon-badge{background:var(--vino);color:#fff;border-radius:20px;padding:2px 9px;font-size:11px;font-family:'Work Sans';vertical-align:middle;}
+.cal{background:var(--verde-2);border:1px solid var(--linea);border-radius:14px;padding:14px 12px 12px;}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.cal-title{font-family:'Fraunces',serif;font-size:18px;font-weight:600;}
+.cal-nav{width:38px;height:38px;border-radius:50%;border:1px solid var(--linea);background:transparent;color:var(--crema);font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0 0 3px;}
+.cal-nav:not(:disabled):hover{border-color:var(--oro);background:rgba(51,114,240,.2);}
+.cal-nav:disabled{opacity:.25;cursor:not-allowed;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+.cal-dow{font-size:11px;opacity:.55;text-align:center;padding:4px 0;}
+.cal-day{aspect-ratio:1;border:none;background:transparent;color:var(--crema);border-radius:10px;font-size:14px;font-family:'Work Sans';cursor:pointer;padding:0;}
+.cal-day:disabled{opacity:.22;cursor:not-allowed;}
+.cal-day:hover:not(:disabled){background:rgba(51,114,240,.28);}
+.cal-day.hoy{box-shadow:inset 0 0 0 1px var(--crema);}
+.cal-day.sel{background:var(--oro);color:#fff;font-weight:600;}
+.hidden{display:none !important;}
+</style>
+</head>
+<body>
+
+<div class="wrap" id="vistaCliente">
+  <header class="header-centro">
+    <div class="header-row">
+      <div class="pole" aria-hidden="true"></div>
+      <div class="titulo-centro"><h1 class="brand"><span class="brand-top">Barbería</span>San <em>Andrés</em></h1>
+      <div class="sub">Lunes a sábado, 9:00–13:00 y 17:00–21:00.</div></div>
+      <div class="pole" aria-hidden="true"></div>
+    </div>
+    <button class="linkchico" id="irPanel">Panel barberos</button>
+  </header>
+
+  <h2 class="tit">Barbero</h2>
+  <div class="chips" id="barberos"></div>
+
+  <div id="calCliente" style="margin-top:20px"></div>
+
+  <section class="franja"><h2 class="tit">Mañana</h2><div class="slots" id="slotsManana"></div></section>
+  <section class="franja"><h2 class="tit">Tarde</h2><div class="slots" id="slotsTarde"></div></section>
+
+  <div class="sena">Seña para reservar: <b id="montoSena"></b> (30% del corte, <span id="montoCorte"></span>). El resto se abona en el local.</div>
+
+  <div class="franjafoot">
+    <button class="linkchico cta-curso" id="abrirCursos" style="display:inline-flex;align-items:center;gap:7px">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="6" cy="6" r="2.6"/><circle cx="6" cy="18" r="2.6"/><path d="M8.2 7.6 20 18M8.2 16.4 20 6"/></svg>
+      Inscribirme a un curso
+    </button>
+    <button class="linkchico cta-promo" id="abrirPromos" style="display:inline-flex;align-items:center;justify-content:center;gap:7px">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12V4h8l10 10-8 8L3 12Z"/><circle cx="7.5" cy="8.5" r="1.3"/></svg>
+      Promociones
+    </button>
+    <button class="linkchico cta-cat" id="abrirCatalogo" style="display:inline-flex;align-items:center;justify-content:center;gap:7px">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M10 9.5v5l4.5-2.5L10 9.5Z"/></svg>
+      Catálogo de cortes
+    </button>
+  </div>
+
+  <div class="rotulo">Seguinos en nuestras redes</div>
+  <div class="redes" id="redes"></div>
+  <div class="rotulo">Medios de pago</div>
+  <div class="pagos" id="pagos"></div>
+
+  <div class="foot">Los horarios ocupados se actualizan al instante para todos.</div>
+</div>
+
+<div class="wrap hidden" id="vistaBarbero">
+  <header>
+    <div class="header-row">
+      <div class="pole" aria-hidden="true"></div>
+      <div><h1 class="brand">Panel de <em>barberos</em></h1>
+      <div class="sub" id="panelSub">Ingresá o registrate para ver tus turnos.</div></div>
+      <svg class="tijerapeine" viewBox="0 0 60 88" aria-hidden="true">
+        <g fill="none" stroke="var(--oro)" stroke-width="2.6" stroke-linecap="round">
+          <path d="M30 8 L12 60"/><path d="M30 8 L48 60"/>
+          <circle cx="11" cy="66" r="7"/><circle cx="49" cy="66" r="7"/>
+        </g>
+        <g stroke="var(--vino)" stroke-width="2.4" stroke-linecap="round">
+          <line x1="6" y1="20" x2="54" y2="20"/>
+          <line x1="8" y1="27" x2="8" y2="12"/><line x1="15" y1="27" x2="15" y2="12"/>
+          <line x1="22" y1="27" x2="22" y2="12"/><line x1="29" y1="27" x2="29" y2="12"/>
+          <line x1="36" y1="27" x2="36" y2="12"/><line x1="43" y1="27" x2="43" y2="12"/>
+          <line x1="50" y1="27" x2="50" y2="12"/>
+        </g>
+      </svg>
+    </div>
+    <button class="linkchico" id="irCliente">Volver</button>
+  </header>
+
+  <div class="chips" style="margin-bottom:16px">
+    <div class="chip barbchip sel" id="modoBarbero">Soy barbero</div>
+    <div class="chip barbchip" id="modoAdmin">Administrador</div>
+  </div>
+
+  <div id="panelLogin">
+    <h2 class="tit">Ingresar</h2>
+    <div class="campo"><label>Elegí tu nombre</label>
+      <select id="loginSelect"><option value="">— Seleccioná —</option></select>
+    </div>
+    <div class="campo"><label>PIN</label><input id="loginPin" inputmode="numeric" maxlength="4" placeholder="4 dígitos"></div>
+    <div class="botones"><button class="btn si" id="btnIngresar" style="flex:none;padding:13px 22px">Ingresar</button></div>
+
+    <h2 class="tit" style="margin-top:28px">O registrá tu ficha</h2>
+    <div class="campo"><label>Nombre y apellido</label><input id="regNombre" placeholder="Nombre"></div>
+    <div class="campo"><label>Email</label><input id="regEmail" type="email" placeholder="tu@mail.com"></div>
+    <div class="campo"><label>Creá un PIN</label><input id="regPin" inputmode="numeric" maxlength="4" placeholder="4 dígitos"></div>
+
+    <h2 class="tit" style="margin-top:22px">Foto de perfil</h2>
+    <div id="fotoPreview" style="margin-bottom:10px"></div>
+    <div class="campo"><input id="regFoto" type="file" accept="image/*"></div>
+    <div class="sub" style="margin-top:-6px">Opcional. Elegí una foto tuya, como en redes sociales.</div>
+
+    <div class="botones"><button class="btn si" id="btnRegistrar" style="flex:none;padding:13px 22px;background:var(--oro);color:var(--verde)">Registrarme</button></div>
+  </div>
+
+  <div id="panelTurnos" class="hidden">
+    <h2 class="tit" id="panelNombre"></h2>
+    <div id="calPanel"></div>
+    <div id="listaTurnos" style="margin-top:14px"></div>
+
+    <h2 class="tit" style="margin-top:26px">Agendar un turno</h2>
+    <div class="sub" style="margin-bottom:10px">Para tus clientes personales. No les pide seña.</div>
+    <section class="franja"><h2 class="tit" style="font-size:12px">Mañana</h2><div class="slots" id="panelSlotsManana"></div></section>
+    <section class="franja"><h2 class="tit" style="font-size:12px">Tarde</h2><div class="slots" id="panelSlotsTarde"></div></section>
+
+    <button class="linkchico" id="buzonToggle" style="display:inline-flex;align-items:center;gap:7px;margin-top:26px;padding:9px 14px;">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4.5" width="20" height="15" rx="2"/><path d="M2.5 5.5 12 13.5l9.5-8"/></svg>
+      Buzón <span id="buzonBadge"></span>
+    </button>
+    <div id="buzonPanel" class="hidden" style="margin-top:14px">
+      <div class="sub" style="margin-bottom:12px">Avisos de turnos reservados, aunque no hayas tenido la app abierta.</div>
+      <h2 class="tit" style="font-size:12px">Pendientes de leer</h2>
+      <div id="listaBuzonPendientes"></div>
+      <h2 class="tit" style="font-size:12px;margin-top:18px">Leídas</h2>
+      <div id="listaBuzonLeidas"></div>
+    </div>
+
+    <h2 class="tit" style="margin-top:28px">Subir video al catálogo</h2>
+    <div class="sub" style="margin-bottom:10px">MP4 o WebM, hasta 20 MB (clips cortos). Va a salir con tu nombre abajo.</div>
+    <div class="campo"><input id="videoFile" type="file" accept="video/mp4,video/webm,video/quicktime" style="background:transparent;color:var(--crema);border-color:var(--linea)"></div>
+    <div class="campo"><input id="videoTitulo" placeholder="Título del corte (opcional)" style="background:transparent;color:var(--crema);border-color:var(--linea)"></div>
+    <div class="botones"><button class="btn si" id="btnSubirVideo" style="flex:none;padding:13px 22px;background:var(--oro);color:#fff">Subir video</button></div>
+    <h2 class="tit" style="margin-top:22px;font-size:12px">Mis videos</h2>
+    <div id="misVideos"></div>
+  </div>
+
+  <div id="panelAdminLogin" class="hidden">
+    <h2 class="tit">Acceso administrador</h2>
+    <div class="campo"><label>Nombre</label><input id="adminNombre" placeholder="Nombre"></div>
+    <div class="campo"><label>PIN</label><input id="adminPin" inputmode="numeric" maxlength="4" placeholder="4 dígitos"></div>
+    <div class="botones"><button class="btn si" id="btnAdminIngresar" style="flex:none;padding:13px 22px">Ingresar</button></div>
+  </div>
+
+  <div id="panelAdmin" class="hidden">
+    <h2 class="tit" id="adminTit"></h2>
+    <div id="adminBarberos"></div>
+    <div class="campo" style="margin-top:14px"><label>Nuevo barbero — nombre</label><input id="adminNuevoNombre" placeholder="Nombre"></div>
+    <div class="campo"><label>Email</label><input id="adminNuevoEmail" type="email" placeholder="mail@ejemplo.com"></div>
+    <div class="campo"><label>PIN (4 dígitos)</label><input id="adminNuevoPin" inputmode="numeric" maxlength="4"></div>
+    <div class="botones"><button class="btn si" id="btnAdminAgregar" style="flex:none;padding:13px 22px;background:var(--oro);color:var(--verde)">Agregar barbero</button></div>
+
+    <div id="adminSoloEditor" class="hidden">
+      <h2 class="tit" style="margin-top:28px">Precio y seña</h2>
+      <div class="campo"><label>Precio del corte</label><input id="cfgPrecio" inputmode="numeric"></div>
+      <div class="campo"><label>Seña (%)</label><input id="cfgSenaPct" inputmode="numeric"></div>
+      <div class="botones"><button class="btn si" id="btnGuardarPrecio" style="flex:none;padding:13px 22px">Guardar</button></div>
+
+      <h2 class="tit" style="margin-top:28px">Redes</h2>
+      <div class="campo"><label>Instagram (link)</label><input id="cfgIg"></div>
+      <div class="campo"><label>Facebook (link)</label><input id="cfgFb"></div>
+      <div class="campo"><label>WhatsApp (link)</label><input id="cfgWa"></div>
+      <div class="botones"><button class="btn si" id="btnGuardarRedes" style="flex:none;padding:13px 22px">Guardar</button></div>
+
+      <h2 class="tit" style="margin-top:28px">Medios de pago</h2>
+      <label style="display:block;margin-bottom:6px;font-size:14px"><input type="checkbox" id="cfgEfectivo"> Efectivo</label>
+      <label style="display:block;margin-bottom:6px;font-size:14px"><input type="checkbox" id="cfgDebito"> Débito</label>
+      <label style="display:block;margin-bottom:6px;font-size:14px"><input type="checkbox" id="cfgCredito"> Crédito</label>
+      <label style="display:block;margin-bottom:6px;font-size:14px"><input type="checkbox" id="cfgMp"> Mercado Pago</label>
+      <div class="campo" style="margin-top:8px"><label>Link de Mercado Pago</label><input id="cfgMpLink"></div>
+      <div class="campo"><label>Alias de Mercado Pago para cobrar la seña</label><input id="cfgAliasMp" placeholder="ej: sanandres.barberia"></div>
+      <div class="botones"><button class="btn si" id="btnGuardarPagos" style="flex:none;padding:13px 22px">Guardar</button></div>
+
+      <h2 class="tit" style="margin-top:28px">Promociones</h2>
+      <div id="adminPromos"></div>
+      <div class="campo" style="margin-top:10px"><label>Título</label><input id="promoTitulo" placeholder="ej: Martes 2x1 en corte + barba"></div>
+      <div class="campo"><label>Descripción</label><input id="promoDesc" placeholder="Detalle de la promo"></div>
+      <div class="campo"><label>Días / vigencia (opcional)</label><input id="promoDias" placeholder="ej: martes y miércoles"></div>
+      <div class="botones"><button class="btn si" id="btnAgregarPromo" style="flex:none;padding:13px 22px;background:var(--oro);color:#fff">Agregar promoción</button></div>
+
+      <h2 class="tit" style="margin-top:28px">Catálogo de videos</h2>
+      <div id="adminCatalogo"></div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlaySena">
+  <div class="hoja">
+    <h3>Transferí la seña</h3>
+    <div class="cuando" id="cuandoSena"></div>
+    <div class="senainfo">
+      Alias para transferir:
+      <button type="button" class="alias-copy" id="aliasSena"></button><br>
+      Monto a transferir: <b id="montoSenaModal"></b><br>
+      Transferí ese monto y después subí el comprobante para confirmar tu turno.
+    </div>
+    <div class="botones">
+      <button class="btn no" id="senaCancelar">Cancelar</button>
+      <button class="btn si" id="senaContinuar">Ya transferí, continuar</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="hoja">
+    <h3>Confirmar turno</h3>
+    <div class="cuando" id="cuando"></div>
+    <div class="senainfo">Seña ya transferida: <b id="senaModal"></b>. Subí el comprobante para asignar el turno.</div>
+    <div class="campo"><label>Nombre</label><input id="nombre" placeholder="Tu nombre"></div>
+    <div class="campo"><label>Teléfono</label><input id="telefono" placeholder="Tu teléfono" inputmode="tel"></div>
+    <div class="campo"><label>Comprobante de la transferencia</label><input id="comprobante" type="file" accept="image/*"></div>
+    <div id="comprobantePreview"></div>
+    <div class="campo"><label>¿Depositaste desde otra cuenta? A nombre de:</label><input id="cuentaOtro" placeholder="Dejalo vacío si es tu propia cuenta"></div>
+    <div class="campo"><label>Comentarios</label><textarea id="comentarios" rows="3" placeholder="Algo que quieras avisarle al barbero (opcional)" style="width:100%;padding:11px 12px;border-radius:8px;border:1px solid rgba(12,35,64,.2);font-size:15px;font-family:'Work Sans';background:#fff;color:var(--verde);resize:vertical"></textarea></div>
+    <div class="botones">
+      <button class="btn no" id="cancelar">Atrás</button>
+      <button class="btn si" id="confirmar">Confirmar y reservar</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlayPromos">
+  <div class="hoja">
+    <h3 style="display:flex;align-items:center;gap:8px">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--oro)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12V4h8l10 10-8 8L3 12Z"/><circle cx="7.5" cy="8.5" r="1.3"/></svg>
+      Promociones
+    </h3>
+    <div class="cuando">Aprovechá los días de promo.</div>
+    <div id="listaPromos"></div>
+    <div class="botones"><button class="btn no" id="promosCerrar" style="opacity:.8">Cerrar</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="overlayManual">
+  <div class="hoja">
+    <h3>Agendar turno</h3>
+    <div class="cuando" id="cuandoManual"></div>
+    <div class="campo"><label>Nombre del cliente</label><input id="manualNombre" placeholder="Nombre y apellido"></div>
+    <div class="campo"><label>Teléfono</label><input id="manualTelefono" inputmode="tel" placeholder="Teléfono"></div>
+    <div class="botones">
+      <button class="btn no" id="manualCancelar">Cancelar</button>
+      <button class="btn si" id="manualConfirmar">Agendar</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlayCatalogo">
+  <div class="hoja">
+    <h3 style="display:flex;align-items:center;gap:8px">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--vino)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M10 9.5v5l4.5-2.5L10 9.5Z"/></svg>
+      Catálogo de cortes
+    </h3>
+    <div class="cuando">Videos de cortes hechos por nuestros barberos.</div>
+    <div id="listaCatalogo"></div>
+    <div class="botones"><button class="btn no" id="catalogoCerrar" style="opacity:.8">Cerrar</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="overlayCursos">
+  <div class="hoja">
+    <h3 style="display:flex;align-items:center;gap:8px">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--vino)" stroke-width="1.8" stroke-linecap="round"><circle cx="6" cy="6" r="2.6"/><circle cx="6" cy="18" r="2.6"/><path d="M8.2 7.6 20 18M8.2 16.4 20 6"/></svg>
+      Inscripción a curso
+    </h3>
+    <div class="cuando">Te contactamos con la info y las fechas disponibles.</div>
+    <div class="campo"><label>Nombre</label><input id="cursoNombre" placeholder="Tu nombre"></div>
+    <div class="campo"><label>Teléfono</label><input id="cursoTelefono" placeholder="Tu teléfono" inputmode="tel"></div>
+    <div class="botones">
+      <button class="btn no" id="cursoCancelar">Cancelar</button>
+      <button class="btn si" id="cursoConfirmar">Enviar</button>
+    </div>
+  </div>
+</div>
+
+<div class="aviso" id="aviso"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL='https://sascxgmwejrdtueoxypd.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNhc2N4Z213ZWpyZHR1ZW94eXBkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4ODM1NjEsImV4cCI6MjEwNjQ1OTU2MX0.2PDML3BG5DkFX0SfoKzwdj1XSueml7yGAjO5Z-sc9tg';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+let cfg={
+  precioCorte:12000, senaPct:0.30,
+  redes:{ instagram:'#', facebook:'#', whatsapp:'#' },
+  pagos:{ efectivo:true, debito:true, credito:true, mercadopago:true },
+  mpLink:'#', aliasMp:''
+};
+const ROLES=[{nombre:'Chis01',pin:'0510',rol:'editor'},{nombre:'Zaca',pin:'1905',rol:'lider'}];
+let adminRol=null, modo='barbero';
+function money(n){return '$'+Math.round(n).toLocaleString('es-AR');}
+function actualizarInfoPrecio(){
+  const s=money(cfg.precioCorte*cfg.senaPct), c=money(cfg.precioCorte);
+  document.getElementById('montoSena').textContent=s;
+  document.getElementById('montoCorte').textContent=c;
+  document.getElementById('senaModal').textContent=s;
+  document.getElementById('montoSenaModal').textContent=s;
+  const btnAliasSena=document.getElementById('aliasSena');
+  if(cfg.aliasMp){
+    btnAliasSena.innerHTML='<span>'+cfg.aliasMp+'</span><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>';
+    btnAliasSena.disabled=false;
+  }else{
+    btnAliasSena.textContent='(el local todavía no cargó su alias)';
+    btnAliasSena.disabled=true;
+  }
+}
+
+const DIAS_ABR_ES=['dom','lun','mar','mié','jue','vie','sáb'];
+function pad(n){return n<10?'0'+n:''+n;}
+function fechaISO(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
+function slotsFranja(inicio,fin){
+  const out=[];let [h,m]=inicio.split(':').map(Number);const [hf,mf]=fin.split(':').map(Number);
+  while(h<hf||(h===hf&&m<mf)){out.push(pad(h)+':'+pad(m));m+=30;if(m>=60){m=0;h++;}}
+  return out;
+}
+const MANANA=slotsFranja('09:00','13:00');
+const TARDE=slotsFranja('17:00','21:00');
+
+const MESES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const MAX_MESES_ADELANTE=3;
+const hoyISO=fechaISO(new Date());
+const dias=[];
+{
+  const h=new Date();
+  const fin=new Date(h.getFullYear(),h.getMonth()+MAX_MESES_ADELANTE+1,0);
+  for(let d=new Date(h.getFullYear(),h.getMonth(),h.getDate());d<=fin;d=new Date(d.getFullYear(),d.getMonth(),d.getDate()+1)){
+    if(d.getDay()!==0)dias.push(new Date(d));
+  }
+}
+function fmtFecha(iso){
+  const [y,m,d]=iso.split('-').map(Number);
+  return DIAS_ABR_ES[new Date(y,m-1,d).getDay()]+' '+d+'/'+m;
+}
+function renderCalendario(contId,estado,onSelect){
+  const cont=document.getElementById(contId);
+  cont.className='cal';cont.innerHTML='';
+  const b=new Date();
+  const first=new Date(b.getFullYear(),b.getMonth()+estado.mes,1);
+  const y=first.getFullYear(),m=first.getMonth();
+  const head=document.createElement('div');head.className='cal-head';
+  const prev=document.createElement('button');
+  prev.className='cal-nav';prev.textContent='‹';prev.setAttribute('aria-label','Mes anterior');
+  prev.disabled=estado.mes<=0;
+  prev.onclick=()=>{estado.mes--;renderCalendario(contId,estado,onSelect);};
+  const next=document.createElement('button');
+  next.className='cal-nav';next.textContent='›';next.setAttribute('aria-label','Mes siguiente');
+  next.disabled=estado.mes>=MAX_MESES_ADELANTE;
+  next.onclick=()=>{estado.mes++;renderCalendario(contId,estado,onSelect);};
+  const title=document.createElement('div');title.className='cal-title';title.textContent=MESES[m]+' '+y;
+  head.appendChild(prev);head.appendChild(title);head.appendChild(next);
+  cont.appendChild(head);
+  const grid=document.createElement('div');grid.className='cal-grid';
+  ['L','M','M','J','V','S','D'].forEach(l=>{const e=document.createElement('div');e.className='cal-dow';e.textContent=l;grid.appendChild(e);});
+  const blancos=(first.getDay()+6)%7;
+  for(let i=0;i<blancos;i++)grid.appendChild(document.createElement('div'));
+  const n=new Date(y,m+1,0).getDate();
+  for(let d=1;d<=n;d++){
+    const fecha=new Date(y,m,d),iso=fechaISO(fecha);
+    const cerrado=fecha.getDay()===0;
+    const btn=document.createElement('button');
+    btn.className='cal-day'+(iso===hoyISO?' hoy':'')+(iso===estado.sel?' sel':'');
+    btn.textContent=d;
+    btn.disabled=cerrado||iso<hoyISO;
+    if(cerrado)btn.title='Cerrado';
+    btn.onclick=()=>{estado.sel=iso;onSelect(iso);renderCalendario(contId,estado,onSelect);};
+    grid.appendChild(btn);
+  }
+  cont.appendChild(grid);
+}
+
+let diaSel=fechaISO(dias[0]);
+let diaPanelSel=fechaISO(dias[0]);
+const estadoCliente={mes:0,sel:diaSel};
+const estadoPanel={mes:0,sel:diaPanelSel};
+let miId=localStorage.getItem('miId')||('u'+Math.random().toString(36).slice(2,9));
+try{localStorage.setItem('miId',miId);}catch(e){}
+let barberos=[];
+let barberoSel=null;
+let barberoLogueado=null;
+let chCitasCliente=null, chCitasPanel=null, chBuzon=null, chBarberos=null, chPromos=null, chCatalogo=null, chConfig=null;
+let primerCargaPanel=true;
+
+function avisar(msg){
+  const a=document.getElementById('aviso');
+  a.textContent=msg;a.classList.add('on');
+  setTimeout(()=>a.classList.remove('on'),2400);
+}
+function beep(){
+  try{
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.frequency.value=880;o.connect(g);g.connect(ctx.destination);
+    g.gain.setValueAtTime(.12,ctx.currentTime);
+    o.start();o.stop(ctx.currentTime+.18);
+  }catch(e){}
+}
+
+/* ---------- Avatar ---------- */
+function avatarFallback(size){
+  return '<svg viewBox="0 0 60 60" width="'+size+'" height="'+size+'" style="flex:0 0 auto"><circle cx="30" cy="30" r="29" fill="rgba(245,247,250,.12)" stroke="rgba(245,247,250,.25)"/><circle cx="30" cy="24" r="10" fill="rgba(245,247,250,.45)"/><path d="M12 51c2-12 11-18 18-18s16 6 18 18" fill="rgba(245,247,250,.45)"/></svg>';
+}
+function avatarHTML(b,size){
+  size=size||56;
+  if(b&&b.foto_url)return '<img src="'+b.foto_url+'" width="'+size+'" height="'+size+'" style="border-radius:50%;object-fit:cover;flex:0 0 auto;display:inline-block;vertical-align:middle">';
+  return avatarFallback(size);
+}
+let fotoUrlSel=null;
+document.getElementById('regFoto').onchange=async(e)=>{
+  const f=e.target.files[0];
+  const prev=document.getElementById('fotoPreview');
+  fotoUrlSel=null;
+  if(!f){prev.innerHTML=avatarFallback(68);return;}
+  const localUrl=URL.createObjectURL(f);
+  prev.innerHTML='<img src="'+localUrl+'" style="width:68px;height:68px;border-radius:50%;object-fit:cover;display:block"><div class="sub" style="margin-top:6px">Subiendo…</div>';
+  try{
+    const img=await new Promise((res,rej)=>{const im=new Image();im.onload=()=>res(im);im.onerror=rej;im.src=localUrl;});
+    const size=320;
+    const canvas=document.createElement('canvas');canvas.width=size;canvas.height=size;
+    const ctx=canvas.getContext('2d');
+    const s=Math.min(img.width,img.height),sx=(img.width-s)/2,sy=(img.height-s)/2;
+    ctx.drawImage(img,sx,sy,s,s,0,0,size,size);
+    const blob=await new Promise(res=>canvas.toBlob(res,'image/jpeg',0.85));
+    const path='barbero_'+Date.now()+'_'+Math.random().toString(36).slice(2,8)+'.jpg';
+    const {error}=await sb.storage.from('fotos').upload(path,blob,{contentType:'image/jpeg'});
+    if(error)throw error;
+    const {data}=sb.storage.from('fotos').getPublicUrl(path);
+    fotoUrlSel=data.publicUrl;
+    prev.innerHTML='<img src="'+localUrl+'" style="width:68px;height:68px;border-radius:50%;object-fit:cover;display:block"><div class="sub" style="margin-top:6px">Foto lista ✓</div>';
+  }catch(err){
+    prev.innerHTML='<img src="'+localUrl+'" style="width:68px;height:68px;border-radius:50%;object-fit:cover;display:block"><div class="sub" style="margin-top:6px;color:var(--vino)">No se pudo subir la foto</div>';
+  }
+};
+
+/* ---------- Barberos ---------- */
+function renderBarberoChips(){
+  const cont=document.getElementById('barberos');
+  cont.innerHTML='';
+  barberos.forEach(b=>{
+    const el=document.createElement('div');
+    el.className='chip barbchip'+(barberoSel===b.id?' sel':'');
+    el.innerHTML=avatarHTML(b,22)+'<span>'+b.nombre+'</span>';
+    el.onclick=()=>{barberoSel=b.id;renderBarberoChips();suscribirSlotsCliente();};
+    cont.appendChild(el);
+  });
+  if(!barberos.length){
+    const el=document.createElement('div');
+    el.className='chip barbchip';el.style.opacity=.5;
+    el.textContent='Aún no hay barberos registrados';
+    cont.appendChild(el);
+  }
+}
+function renderLoginSelect(){
+  const sel=document.getElementById('loginSelect');
+  sel.innerHTML='<option value="">— Seleccioná —</option>';
+  barberos.forEach(b=>{
+    const o=document.createElement('option');o.value=b.id;o.textContent=b.nombre;sel.appendChild(o);
+  });
+}
+async function cargarBarberos(){
+  const {data,error}=await sb.from('barberos').select('*').order('nombre');
+  barberos=error?[]:data;
+  renderBarberoChips();renderLoginSelect();renderAdminBarberos();
+  if(!barberoSel&&barberos.length){barberoSel=barberos[0].id;renderBarberoChips();suscribirSlotsCliente();}
+}
+
+/* ---------- Días (cliente) ---------- */
+function renderDias(){renderCalendario('calCliente',estadoCliente,iso=>{diaSel=iso;cargarSlotsCliente();});}
+function renderSlots(ocupados){
+  const man=document.getElementById('slotsManana'),tar=document.getElementById('slotsTarde');
+  man.innerHTML='';tar.innerHTML='';
+  if(!barberoSel){
+    man.innerHTML='<div class="vacio">Elegí un barbero para ver los horarios.</div>';return;
+  }
+  function pintar(lista,cont){
+    lista.forEach(hora=>{
+      const b=document.createElement('button');
+      b.className='slot';b.textContent=hora;
+      const info=ocupados[hora];
+      if(info){
+        if(info.uid===miId){b.classList.add('propio');b.title='Tu turno';}
+        else{b.classList.add('ocupado');b.disabled=true;}
+      }
+      b.onclick=()=>{if(!info)abrirFormulario(hora);};
+      cont.appendChild(b);
+    });
+  }
+  pintar(MANANA,man);pintar(TARDE,tar);
+}
+async function cargarSlotsCliente(){
+  if(!barberoSel){renderSlots({});return;}
+  const {data,error}=await sb.from('citas').select('*').eq('fecha',diaSel).eq('barbero_id',barberoSel);
+  const ocupados={};
+  (!error&&data||[]).forEach(r=>{ocupados[r.hora]={nombre:r.nombre_cliente,telefono:r.telefono,uid:r.uid,senaPaga:r.sena_paga,manual:r.manual,id:r.id};});
+  renderSlots(ocupados);
+}
+function suscribirSlotsCliente(){
+  if(chCitasCliente){sb.removeChannel(chCitasCliente);chCitasCliente=null;}
+  cargarSlotsCliente();
+  if(!barberoSel)return;
+  chCitasCliente=sb.channel('citas-cliente-'+barberoSel)
+    .on('postgres_changes',{event:'*',schema:'public',table:'citas',filter:'barbero_id=eq.'+barberoSel},()=>{cargarSlotsCliente();})
+    .subscribe();
+}
+
+/* ---------- Modal reserva ---------- */
+let comprobanteDataURL=null;
+function abrirFormulario(hora){
+  const d=dias.find(x=>fechaISO(x)===diaSel);
+  const cuando=DIAS_ABR_ES[d.getDay()]+' '+d.getDate()+'/'+(d.getMonth()+1)+' — '+hora+' hs';
+  document.getElementById('cuandoSena').textContent=cuando;
+  document.getElementById('overlaySena').classList.add('on');
+  document.getElementById('overlaySena').dataset.hora=hora;
+}
+document.getElementById('senaCancelar').onclick=()=>document.getElementById('overlaySena').classList.remove('on');
+document.getElementById('aliasSena').onclick=async()=>{
+  if(!cfg.aliasMp)return;
+  try{
+    await navigator.clipboard.writeText(cfg.aliasMp);
+    avisar('Alias copiado');
+  }catch(e){avisar('No se pudo copiar. Copialo a mano: '+cfg.aliasMp);}
+};
+document.getElementById('senaContinuar').onclick=()=>{
+  const hora=document.getElementById('overlaySena').dataset.hora;
+  document.getElementById('overlaySena').classList.remove('on');
+  const d=dias.find(x=>fechaISO(x)===diaSel);
+  document.getElementById('cuando').textContent=
+    DIAS_ABR_ES[d.getDay()]+' '+d.getDate()+'/'+(d.getMonth()+1)+' — '+hora+' hs';
+  document.getElementById('overlay').classList.add('on');
+  document.getElementById('overlay').dataset.hora=hora;
+  document.getElementById('nombre').value='';document.getElementById('telefono').value='';
+  document.getElementById('comprobante').value='';
+  document.getElementById('comprobantePreview').innerHTML='';
+  document.getElementById('cuentaOtro').value='';
+  document.getElementById('comentarios').value='';
+  comprobanteDataURL=null;
+};
+document.getElementById('cancelar').onclick=()=>{
+  document.getElementById('overlay').classList.remove('on');
+  document.getElementById('overlaySena').classList.add('on');
+};
+document.getElementById('comprobante').onchange=(e)=>{
+  const file=e.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=(ev)=>{
+    const img=new Image();
+    img.onload=()=>{
+      const maxW=640;
+      const escala=Math.min(1,maxW/img.width);
+      const canvas=document.createElement('canvas');
+      canvas.width=img.width*escala;canvas.height=img.height*escala;
+      canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+      comprobanteDataURL=canvas.toDataURL('image/jpeg',0.6);
+      document.getElementById('comprobantePreview').innerHTML=
+        '<img src="'+comprobanteDataURL+'" style="max-width:100%;border-radius:8px;margin-bottom:6px">';
+    };
+    img.src=ev.target.result;
+  };
+  reader.readAsDataURL(file);
+};
+
+document.getElementById('confirmar').onclick=async()=>{
+  const hora=document.getElementById('overlay').dataset.hora;
+  const nombre=document.getElementById('nombre').value.trim();
+  const telefono=document.getElementById('telefono').value.trim();
+  const cuentaOtro=document.getElementById('cuentaOtro').value.trim();
+  const comentarios=document.getElementById('comentarios').value.trim();
+  if(!nombre||!telefono){avisar('Completá nombre y teléfono');return;}
+  if(!comprobanteDataURL){avisar('Subí el comprobante de la transferencia');return;}
+  if(!barberoSel){avisar('Elegí un barbero');return;}
+  try{
+    const {error}=await sb.from('citas').insert({
+      fecha:diaSel,hora,barbero_id:barberoSel,nombre_cliente:nombre,telefono,uid:miId,
+      sena_paga:true,cuenta_otro:cuentaOtro||null,comentarios:comentarios||null,
+      comprobante_url:comprobanteDataURL,manual:false
+    });
+    if(error){
+      if(error.code==='23505'){avisar('Ese horario ya fue tomado');document.getElementById('overlay').classList.remove('on');cargarSlotsCliente();return;}
+      throw error;
+    }
+    try{
+      await sb.from('buzon').insert({
+        barbero_id:barberoSel,fecha:diaSel,hora,nombre,telefono,cuenta_otro:cuentaOtro||null,comentarios:comentarios||null,
+        comprobante_url:comprobanteDataURL,leido:false
+      });
+    }catch(e){}
+    document.getElementById('overlay').classList.remove('on');
+    avisar('¡Turno y seña confirmados! '+hora+' hs');
+  }catch(e){avisar('No se pudo reservar. Probá de nuevo.');}
+};
+
+/* ---------- Cursos ---------- */
+document.getElementById('abrirCursos').onclick=()=>document.getElementById('overlayCursos').classList.add('on');
+document.getElementById('cursoCancelar').onclick=()=>document.getElementById('overlayCursos').classList.remove('on');
+document.getElementById('cursoConfirmar').onclick=async()=>{
+  const nombre=document.getElementById('cursoNombre').value.trim();
+  const telefono=document.getElementById('cursoTelefono').value.trim();
+  if(!nombre||!telefono){avisar('Completá nombre y teléfono');return;}
+  try{
+    await sb.from('cursos').insert({nombre,telefono});
+    document.getElementById('overlayCursos').classList.remove('on');
+    avisar('¡Listo! Te contactamos pronto.');
+  }catch(e){avisar('No se pudo enviar. Probá de nuevo.');}
+};
+
+/* ---------- Redes y pagos ---------- */
+function iconoCirculo(txt,color){
+  return '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="'+color+'"/><text x="12" y="16" font-size="9" font-family="Work Sans" font-weight="700" fill="#fff" text-anchor="middle">'+txt+'</text></svg>';
+}
+function iconoTarjeta(color){
+  return '<svg viewBox="0 0 24 16"><rect x="0.5" y="0.5" width="23" height="15" rx="2.5" fill="none" stroke="'+color+'" stroke-width="1.4"/><rect x="0.5" y="4" width="23" height="3" fill="'+color+'"/></svg>';
+}
+function iconoBillete(color){
+  return '<svg viewBox="0 0 24 16"><rect x="0.5" y="0.5" width="23" height="15" rx="2" fill="none" stroke="'+color+'" stroke-width="1.4"/><circle cx="12" cy="8" r="3.2" fill="none" stroke="'+color+'" stroke-width="1.2"/></svg>';
+}
+function renderRedesPagos(){
+  const redes=document.getElementById('redes');
+  redes.innerHTML=
+    '<a class="badge" href="'+cfg.redes.instagram+'" target="_blank" rel="noopener">'+iconoCirculo('IG','#B8935B')+'Instagram</a>'+
+    '<a class="badge" href="'+cfg.redes.facebook+'" target="_blank" rel="noopener">'+iconoCirculo('f','#2E6E8E')+'Facebook</a>'+
+    '<a class="badge" href="'+cfg.redes.whatsapp+'" target="_blank" rel="noopener">'+iconoCirculo('WA','#3D8B5F')+'WhatsApp</a>';
+  const pagos=document.getElementById('pagos');
+  const c='#F1EAD8';
+  let html='';
+  if(cfg.pagos.efectivo)html+='<span class="badge">'+iconoBillete(c)+'Efectivo</span>';
+  if(cfg.pagos.debito)html+='<span class="badge">'+iconoTarjeta(c)+'Débito</span>';
+  if(cfg.pagos.credito)html+='<span class="badge">'+iconoTarjeta(c)+'Crédito</span>';
+  if(cfg.pagos.mercadopago)html+='<a class="badge" href="'+cfg.mpLink+'" target="_blank" rel="noopener">'+iconoTarjeta('#2E6E8E')+'Mercado Pago</a>';
+  pagos.innerHTML=html;
+}
+
+/* ---------- Vistas ---------- */
+document.getElementById('irPanel').onclick=()=>{
+  document.getElementById('vistaCliente').classList.add('hidden');
+  document.getElementById('vistaBarbero').classList.remove('hidden');
+};
+document.getElementById('irCliente').onclick=()=>{
+  document.getElementById('vistaBarbero').classList.add('hidden');
+  document.getElementById('vistaCliente').classList.remove('hidden');
+};
+document.getElementById('modoBarbero').onclick=()=>mostrarModo('barbero');
+document.getElementById('modoAdmin').onclick=()=>mostrarModo('admin');
+function mostrarModo(m){
+  modo=m;
+  document.getElementById('modoBarbero').classList.toggle('sel',m==='barbero');
+  document.getElementById('modoAdmin').classList.toggle('sel',m==='admin');
+  if(m==='barbero'){
+    document.getElementById('panelAdminLogin').classList.add('hidden');
+    document.getElementById('panelAdmin').classList.add('hidden');
+    document.getElementById('panelLogin').classList.toggle('hidden',!!barberoLogueado);
+    document.getElementById('panelTurnos').classList.toggle('hidden',!barberoLogueado);
+  }else{
+    document.getElementById('panelLogin').classList.add('hidden');
+    document.getElementById('panelTurnos').classList.add('hidden');
+    document.getElementById('panelAdminLogin').classList.toggle('hidden',!!adminRol);
+    document.getElementById('panelAdmin').classList.toggle('hidden',!adminRol);
+  }
+}
+document.getElementById('btnAdminIngresar').onclick=()=>{
+  const nombre=document.getElementById('adminNombre').value.trim();
+  const pin=document.getElementById('adminPin').value.trim();
+  const r=ROLES.find(x=>x.nombre.toLowerCase()===nombre.toLowerCase()&&x.pin===pin);
+  if(!r){avisar('Nombre o PIN incorrecto');return;}
+  adminRol=r.rol;
+  document.getElementById('adminTit').textContent=adminRol==='editor'?'Panel del editor':'Panel de la líder — altas y bajas';
+  document.getElementById('adminSoloEditor').classList.toggle('hidden',adminRol!=='editor');
+  if(adminRol==='editor')cargarCfgForm();
+  renderAdminBarberos();
+  mostrarModo('admin');
+};
+function renderAdminBarberos(){
+  const cont=document.getElementById('adminBarberos');
+  if(!cont)return;
+  cont.innerHTML='';
+  if(!barberos.length){cont.innerHTML='<div class="vacio">Sin barberos registrados.</div>';return;}
+  barberos.forEach(b=>{
+    const el=document.createElement('div');
+    el.className='turno-item';
+    const nombreDiv=document.createElement('div');
+    nombreDiv.style.cssText='flex:1;display:flex;align-items:center;gap:8px';
+    nombreDiv.innerHTML=avatarHTML(b,26)+'<span>'+b.nombre+'</span>';
+    const btn=document.createElement('button');
+    btn.className='linkchico';btn.textContent='Eliminar';
+    btn.onclick=async()=>{
+      try{await sb.from('barberos').delete().eq('id',b.id);avisar('Barbero eliminado');cargarBarberos();}
+      catch(e){avisar('No se pudo eliminar.');}
+    };
+    el.appendChild(nombreDiv);el.appendChild(btn);
+    cont.appendChild(el);
+  });
+}
+document.getElementById('btnAdminAgregar').onclick=async()=>{
+  const nombre=document.getElementById('adminNuevoNombre').value.trim();
+  const email=document.getElementById('adminNuevoEmail').value.trim();
+  const pin=document.getElementById('adminNuevoPin').value.trim();
+  if(!nombre||!/^\d{4}$/.test(pin)){avisar('Nombre y PIN de 4 dígitos');return;}
+  try{
+    await sb.from('barberos').insert({nombre,email,pin});
+    avisar('Barbero agregado');
+    document.getElementById('adminNuevoNombre').value='';document.getElementById('adminNuevoEmail').value='';document.getElementById('adminNuevoPin').value='';
+  }catch(e){avisar('No se pudo agregar.');}
+};
+function cargarCfgForm(){
+  document.getElementById('cfgPrecio').value=cfg.precioCorte;
+  document.getElementById('cfgSenaPct').value=Math.round(cfg.senaPct*100);
+  document.getElementById('cfgIg').value=cfg.redes.instagram;
+  document.getElementById('cfgFb').value=cfg.redes.facebook;
+  document.getElementById('cfgWa').value=cfg.redes.whatsapp;
+  document.getElementById('cfgEfectivo').checked=cfg.pagos.efectivo;
+  document.getElementById('cfgDebito').checked=cfg.pagos.debito;
+  document.getElementById('cfgCredito').checked=cfg.pagos.credito;
+  document.getElementById('cfgMp').checked=cfg.pagos.mercadopago;
+  document.getElementById('cfgMpLink').value=cfg.mpLink;
+  document.getElementById('cfgAliasMp').value=cfg.aliasMp;
+}
+document.getElementById('btnGuardarPrecio').onclick=async()=>{
+  const precio=Number(document.getElementById('cfgPrecio').value)||cfg.precioCorte;
+  const pct=(Number(document.getElementById('cfgSenaPct').value)||cfg.senaPct*100)/100;
+  try{await sb.from('config').update({precio_corte:precio,sena_pct:pct}).eq('id',1);avisar('Guardado');}
+  catch(e){avisar('No se pudo guardar.');}
+};
+document.getElementById('btnGuardarRedes').onclick=async()=>{
+  const instagram=document.getElementById('cfgIg').value.trim()||'#';
+  const facebook=document.getElementById('cfgFb').value.trim()||'#';
+  const whatsapp=document.getElementById('cfgWa').value.trim()||'#';
+  try{await sb.from('config').update({instagram,facebook,whatsapp}).eq('id',1);avisar('Guardado');}
+  catch(e){avisar('No se pudo guardar.');}
+};
+document.getElementById('btnGuardarPagos').onclick=async()=>{
+  const pagos={
+    efectivo:document.getElementById('cfgEfectivo').checked,
+    debito:document.getElementById('cfgDebito').checked,
+    credito:document.getElementById('cfgCredito').checked,
+    mercadopago:document.getElementById('cfgMp').checked
+  };
+  const mp_link=document.getElementById('cfgMpLink').value.trim()||'#';
+  const alias_mp=document.getElementById('cfgAliasMp').value.trim();
+  try{await sb.from('config').update({pagos,mp_link,alias_mp}).eq('id',1);avisar('Guardado');}
+  catch(e){avisar('No se pudo guardar.');}
+};
+
+/* ---------- Panel: registro / login ---------- */
+document.getElementById('btnRegistrar').onclick=async()=>{
+  const nombre=document.getElementById('regNombre').value.trim();
+  const email=document.getElementById('regEmail').value.trim();
+  const pin=document.getElementById('regPin').value.trim();
+  if(!nombre||!/^\d{4}$/.test(pin)){avisar('Nombre y PIN de 4 dígitos');return;}
+  try{
+    await sb.from('barberos').insert({nombre,email,pin,foto_url:fotoUrlSel||null});
+    avisar('Ficha creada. Ahora ingresá con tu nombre y PIN.');
+    document.getElementById('regNombre').value='';document.getElementById('regEmail').value='';document.getElementById('regPin').value='';document.getElementById('regFoto').value='';fotoUrlSel=null;document.getElementById('fotoPreview').innerHTML=avatarFallback(68);
+  }catch(e){avisar('No se pudo registrar. Probá de nuevo.');}
+};
+document.getElementById('btnIngresar').onclick=()=>{
+  const id=document.getElementById('loginSelect').value;
+  const pin=document.getElementById('loginPin').value.trim();
+  const b=barberos.find(x=>x.id===id);
+  if(!b){avisar('Elegí tu nombre');return;}
+  if(b.pin!==pin){avisar('PIN incorrecto');return;}
+  barberoLogueado=b;
+  document.getElementById('panelLogin').classList.add('hidden');
+  document.getElementById('panelTurnos').classList.remove('hidden');
+  document.getElementById('panelNombre').innerHTML='<span style="display:inline-flex;align-items:center;gap:8px">'+avatarHTML(b,30)+'Turnos de '+b.nombre+'</span>';
+  document.getElementById('panelSub').textContent='Aviso al instante si tenés la app abierta, y siempre queda guardado en tu Buzón.';
+  renderDiasPanel();
+  suscribirPanel();
+  suscribirBuzon();
+  renderCatalogo();
+};
+
+function renderDiasPanel(){renderCalendario('calPanel',estadoPanel,iso=>{diaPanelSel=iso;cargarPanelSlots();});}
+function renderListaTurnos(slots){
+  const cont=document.getElementById('listaTurnos');
+  cont.innerHTML='';
+  const horas=Object.keys(slots).sort();
+  if(!horas.length){cont.innerHTML='<div class="vacio">Sin turnos ese día.</div>';return;}
+  horas.forEach(h=>{
+    const info=slots[h];
+    const el=document.createElement('div');
+    el.className='turno-item';
+    el.style.alignItems='flex-start';
+    let extra='';
+    if(info.manual)extra+='<div class="c" style="color:var(--oro)">Sin seña · cliente personal</div>';
+    if(info.cuentaOtro)extra+='<div class="c">Depositó: '+info.cuentaOtro+'</div>';
+    if(info.comentarios)extra+='<div class="c" style="opacity:.6">"'+info.comentarios+'"</div>';
+    el.innerHTML='<div class="h">'+h+'</div><div style="flex:1"><div>'+info.nombre+'</div><div class="c">'+info.telefono+'</div>'+extra+'</div>';
+    cont.appendChild(el);
+  });
+}
+let vistosPanel={};
+async function cargarPanelSlots(){
+  if(!barberoLogueado)return;
+  const {data,error}=await sb.from('citas').select('*').eq('fecha',diaPanelSel).eq('barbero_id',barberoLogueado.id);
+  const slots={};
+  (!error&&data||[]).forEach(r=>{slots[r.hora]={nombre:r.nombre_cliente,telefono:r.telefono,uid:r.uid,senaPaga:r.sena_paga,manual:r.manual,cuentaOtro:r.cuenta_otro,comentarios:r.comentarios,id:r.id};});
+  if(!primerCargaPanel&&diaPanelSel===hoyISO){
+    Object.keys(slots).forEach(h=>{
+      if(!vistosPanel[h]){avisar('Nuevo turno: '+h+' hs — '+slots[h].nombre);beep();}
+    });
+  }
+  vistosPanel=slots;primerCargaPanel=false;
+  slotsPanelActual=slots;
+  renderListaTurnos(slots);
+  renderPanelSlots();
+}
+function suscribirPanel(){
+  if(chCitasPanel){sb.removeChannel(chCitasPanel);chCitasPanel=null;}
+  document.getElementById('listaTurnos').innerHTML='';
+  primerCargaPanel=true;vistosPanel={};
+  if(!barberoLogueado)return;
+  cargarPanelSlots();
+  chCitasPanel=sb.channel('citas-panel-'+barberoLogueado.id)
+    .on('postgres_changes',{event:'*',schema:'public',table:'citas',filter:'barbero_id=eq.'+barberoLogueado.id},()=>{cargarPanelSlots();})
+    .subscribe();
+}
+
+let slotsPanelActual={};
+function renderPanelSlots(){
+  const man=document.getElementById('panelSlotsManana'),tar=document.getElementById('panelSlotsTarde');
+  if(!man||!tar)return;
+  man.innerHTML='';tar.innerHTML='';
+  const hoyMismo=diaPanelSel===hoyISO;
+  const ahoraHHMM=hoyMismo?new Date().toTimeString().slice(0,5):null;
+  function pintar(lista,cont){
+    lista.forEach(hora=>{
+      const b=document.createElement('button');
+      b.className='slot';b.textContent=hora;
+      const info=slotsPanelActual[hora];
+      const pasado=hoyMismo&&ahoraHHMM&&hora<ahoraHHMM;
+      if(info){b.classList.add('ocupado');b.disabled=true;}
+      else if(pasado){b.disabled=true;b.style.opacity=.3;}
+      else b.onclick=()=>abrirManual(hora);
+      cont.appendChild(b);
+    });
+  }
+  pintar(MANANA,man);pintar(TARDE,tar);
+}
+function abrirManual(hora){
+  document.getElementById('overlayManual').dataset.hora=hora;
+  document.getElementById('cuandoManual').textContent=fmtFecha(diaPanelSel)+' · '+hora+' hs';
+  document.getElementById('manualNombre').value='';
+  document.getElementById('manualTelefono').value='';
+  document.getElementById('overlayManual').classList.add('on');
+}
+document.getElementById('manualCancelar').onclick=()=>document.getElementById('overlayManual').classList.remove('on');
+document.getElementById('manualConfirmar').onclick=async()=>{
+  const hora=document.getElementById('overlayManual').dataset.hora;
+  const nombre=document.getElementById('manualNombre').value.trim();
+  const telefono=document.getElementById('manualTelefono').value.trim();
+  if(!nombre||!telefono){avisar('Completá nombre y teléfono');return;}
+  if(!barberoLogueado){avisar('No se pudo conectar.');return;}
+  try{
+    const {error}=await sb.from('citas').insert({
+      fecha:diaPanelSel,hora,barbero_id:barberoLogueado.id,nombre_cliente:nombre,telefono,
+      uid:'barbero:'+barberoLogueado.id,sena_paga:false,manual:true
+    });
+    if(error){
+      if(error.code==='23505'){avisar('Ese horario ya fue tomado');document.getElementById('overlayManual').classList.remove('on');cargarPanelSlots();return;}
+      throw error;
+    }
+    document.getElementById('overlayManual').classList.remove('on');
+    avisar('Turno agendado');
+  }catch(e){avisar('No se pudo agendar. Probá de nuevo.');}
+};
+
+function itemBuzon(m){
+  const el=document.createElement('div');
+  el.className='turno-item'+(!m.leido?' nuevo':'');
+  el.style.alignItems='flex-start';
+  const cuando=fmtFecha(m.fecha);
+  const info=document.createElement('div');
+  info.style.flex='1';
+  info.innerHTML='<div><b>'+cuando+' — '+m.hora+' hs</b></div><div class="c">'+m.nombre+' · '+m.telefono+'</div><div class="c" style="opacity:.6">Seña transferida</div>'+
+    (m.cuenta_otro?'<div class="c">Depositó: '+m.cuenta_otro+'</div>':'')+
+    (m.comentarios?'<div class="c" style="opacity:.6">"'+m.comentarios+'"</div>':'');
+  if(m.comprobante_url){
+    const img=document.createElement('img');
+    img.src=m.comprobante_url;
+    img.style.cssText='width:52px;height:52px;object-fit:cover;border-radius:6px;margin-top:6px;cursor:pointer';
+    img.onclick=()=>window.open(m.comprobante_url,'_blank');
+    info.appendChild(img);
+  }
+  el.appendChild(info);
+  if(!m.leido){
+    const btn=document.createElement('button');
+    btn.className='linkchico';btn.textContent='Marcar leído';
+    btn.onclick=()=>{ sb.from('buzon').update({leido:true}).eq('id',m.id).then(()=>{}).catch(()=>{}); };
+    el.appendChild(btn);
+  }
+  return el;
+}
+function renderListaBuzon(msgs){
+  const pend=document.getElementById('listaBuzonPendientes');
+  const leid=document.getElementById('listaBuzonLeidas');
+  const badge=document.getElementById('buzonBadge');
+  pend.innerHTML='';leid.innerHTML='';
+  const pendientes=msgs.filter(m=>!m.leido);
+  const leidas=msgs.filter(m=>m.leido);
+  badge.textContent=pendientes.length?pendientes.length:'';
+  badge.className=pendientes.length?'buzon-badge':'';
+  pend.innerHTML=pendientes.length?'':'<div class="vacio">Sin pendientes.</div>';
+  pendientes.forEach(m=>pend.appendChild(itemBuzon(m)));
+  leid.innerHTML=leidas.length?'':'<div class="vacio">Todavía no hay leídas.</div>';
+  leidas.forEach(m=>leid.appendChild(itemBuzon(m)));
+}
+document.getElementById('buzonToggle').onclick=()=>{
+  document.getElementById('buzonPanel').classList.toggle('hidden');
+};
+async function cargarBuzon(){
+  if(!barberoLogueado)return;
+  const {data,error}=await sb.from('buzon').select('*').eq('barbero_id',barberoLogueado.id).order('creado',{ascending:false}).limit(40);
+  renderListaBuzon(!error&&data||[]);
+}
+function suscribirBuzon(){
+  if(chBuzon){sb.removeChannel(chBuzon);chBuzon=null;}
+  if(!barberoLogueado)return;
+  cargarBuzon();
+  chBuzon=sb.channel('buzon-'+barberoLogueado.id)
+    .on('postgres_changes',{event:'*',schema:'public',table:'buzon',filter:'barbero_id=eq.'+barberoLogueado.id},()=>{cargarBuzon();})
+    .subscribe();
+}
+
+/* ---------- Promociones ---------- */
+let promos=[];
+function itemPromo(p,conBorrar){
+  const el=document.createElement('div');
+  el.className='promo-item';
+  const t=document.createElement('div');t.className='pt';t.textContent=p.titulo||'';
+  el.appendChild(t);
+  if(p.descripcion){const d=document.createElement('div');d.className='pd';d.textContent=p.descripcion;el.appendChild(d);}
+  if(p.dias){const v=document.createElement('div');v.className='pv';v.textContent=p.dias;el.appendChild(v);}
+  if(conBorrar){
+    const b=document.createElement('button');
+    b.className='linkchico';b.textContent='Eliminar';b.style.marginTop='8px';
+    b.onclick=async()=>{
+      try{await sb.from('promociones').delete().eq('id',p.id);avisar('Promoción eliminada');}
+      catch(e){avisar('No se pudo eliminar.');}
+    };
+    el.appendChild(b);
+  }
+  return el;
+}
+function renderPromos(){
+  const cli=document.getElementById('listaPromos');
+  const adm=document.getElementById('adminPromos');
+  cli.innerHTML='';adm.innerHTML='';
+  if(!promos.length){
+    cli.innerHTML='<div class="vacio" style="color:var(--verde)">Todavía no hay promociones cargadas.</div>';
+    adm.innerHTML='<div class="vacio">Sin promociones cargadas.</div>';
+    return;
+  }
+  promos.forEach(p=>{cli.appendChild(itemPromo(p,false));adm.appendChild(itemPromo(p,true));});
+}
+async function cargarPromos(){
+  const {data,error}=await sb.from('promociones').select('*').order('creado',{ascending:false});
+  promos=!error&&data||[];
+  renderPromos();
+}
+document.getElementById('abrirPromos').onclick=()=>document.getElementById('overlayPromos').classList.add('on');
+document.getElementById('promosCerrar').onclick=()=>document.getElementById('overlayPromos').classList.remove('on');
+document.getElementById('btnAgregarPromo').onclick=async()=>{
+  const titulo=document.getElementById('promoTitulo').value.trim();
+  const descripcion=document.getElementById('promoDesc').value.trim();
+  const diasPromo=document.getElementById('promoDias').value.trim();
+  if(!titulo){avisar('Poné un título para la promo');return;}
+  try{
+    await sb.from('promociones').insert({titulo,descripcion,dias:diasPromo});
+    avisar('Promoción agregada');
+    document.getElementById('promoTitulo').value='';document.getElementById('promoDesc').value='';document.getElementById('promoDias').value='';
+  }catch(e){avisar('No se pudo agregar.');}
+};
+
+/* ---------- Catálogo de videos ---------- */
+let catalogo=[];
+async function borrarVideo(v){
+  try{
+    await sb.from('catalogo').delete().eq('id',v.id);
+    avisar('Video eliminado');
+  }catch(e){avisar('No se pudo eliminar.');}
+}
+function itemVideo(v,conBorrar){
+  const el=document.createElement('div');el.className='video-item';
+  const vid=document.createElement('video');
+  vid.src=v.video_url;vid.controls=true;vid.preload='metadata';vid.setAttribute('playsinline','');
+  el.appendChild(vid);
+  if(v.titulo){const t=document.createElement('div');t.className='vt';t.textContent=v.titulo;el.appendChild(t);}
+  const b=document.createElement('div');b.className='vb';b.textContent='Barbero: '+(v.barbero_nombre||'—');el.appendChild(b);
+  if(conBorrar){
+    const x=document.createElement('button');
+    x.className='linkchico';x.textContent='Eliminar';x.style.marginTop='8px';
+    x.onclick=()=>{
+      if(x.dataset.arm){borrarVideo(v);}
+      else{x.dataset.arm='1';x.textContent='¿Seguro? Tocá de nuevo';
+        setTimeout(()=>{x.dataset.arm='';x.textContent='Eliminar';},3000);}
+    };
+    el.appendChild(x);
+  }
+  return el;
+}
+function renderCatalogo(){
+  const cli=document.getElementById('listaCatalogo');
+  const mis=document.getElementById('misVideos');
+  const adm=document.getElementById('adminCatalogo');
+  cli.innerHTML='';mis.innerHTML='';adm.innerHTML='';
+  if(!catalogo.length){
+    cli.innerHTML='<div class="vacio" style="color:var(--verde)">Todavía no hay videos en el catálogo.</div>';
+    mis.innerHTML='<div class="vacio">Todavía no subiste videos.</div>';
+    adm.innerHTML='<div class="vacio">Sin videos cargados.</div>';
+    return;
+  }
+  const propios=barberoLogueado?catalogo.filter(v=>v.barbero_id===barberoLogueado.id):[];
+  if(!propios.length)mis.innerHTML='<div class="vacio">Todavía no subiste videos.</div>';
+  catalogo.forEach(v=>{cli.appendChild(itemVideo(v,false));adm.appendChild(itemVideo(v,true));});
+  propios.forEach(v=>mis.appendChild(itemVideo(v,true)));
+}
+async function cargarCatalogo(){
+  const {data,error}=await sb.from('catalogo').select('*').order('creado',{ascending:false});
+  catalogo=!error&&data||[];
+  renderCatalogo();
+}
+document.getElementById('abrirCatalogo').onclick=()=>document.getElementById('overlayCatalogo').classList.add('on');
+document.getElementById('catalogoCerrar').onclick=()=>document.getElementById('overlayCatalogo').classList.remove('on');
+document.getElementById('btnSubirVideo').onclick=async()=>{
+  if(!barberoLogueado){avisar('Ingresá como barbero para subir videos');return;}
+  const f=document.getElementById('videoFile').files[0];
+  if(!f){avisar('Elegí un video');return;}
+  if(f.size>20*1024*1024){avisar('El video pesa más de 20 MB. Subí uno más corto.');return;}
+  const titulo=document.getElementById('videoTitulo').value.trim();
+  const btn=document.getElementById('btnSubirVideo');
+  btn.disabled=true;btn.textContent='Subiendo…';
+  try{
+    const tipo=f.type||'video/mp4';
+    const ext=/webm/i.test(tipo)?'webm':'mp4';
+    const path='video_'+Date.now()+'_'+Math.random().toString(36).slice(2,8)+'.'+ext;
+    const {error}=await sb.storage.from('catalogo').upload(path,f,{contentType:tipo});
+    if(error)throw error;
+    const {data}=sb.storage.from('catalogo').getPublicUrl(path);
+    await sb.from('catalogo').insert({
+      barbero_id:barberoLogueado.id,barbero_nombre:barberoLogueado.nombre,
+      titulo,video_url:data.publicUrl
+    });
+    document.getElementById('videoFile').value='';document.getElementById('videoTitulo').value='';
+    avisar('Video subido al catálogo');
+  }catch(e){
+    avisar('No se pudo subir el video.');
+  }
+  btn.disabled=false;btn.textContent='Subir video';
+};
+
+/* ---------- Init ---------- */
+(async function init(){
+  actualizarInfoPrecio();
+  renderRedesPagos();
+  document.getElementById('fotoPreview').innerHTML=avatarFallback(68);
+  renderDias();
+  renderSlots({});
+
+  await cargarBarberos();
+  await cargarPromos();
+  await cargarCatalogo();
+
+  const {data:cfgRow}=await sb.from('config').select('*').eq('id',1).maybeSingle();
+  if(cfgRow){
+    cfg={
+      precioCorte:cfgRow.precio_corte??cfg.precioCorte,
+      senaPct:cfgRow.sena_pct??cfg.senaPct,
+      redes:{instagram:cfgRow.instagram||cfg.redes.instagram,facebook:cfgRow.facebook||cfg.redes.facebook,whatsapp:cfgRow.whatsapp||cfg.redes.whatsapp},
+      pagos:Object.assign({},cfg.pagos,cfgRow.pagos||{}),
+      mpLink:cfgRow.mp_link??cfg.mpLink,
+      aliasMp:cfgRow.alias_mp??cfg.aliasMp
+    };
+    actualizarInfoPrecio();renderRedesPagos();
+  }
+
+  chBarberos=sb.channel('barberos-cambios').on('postgres_changes',{event:'*',schema:'public',table:'barberos'},()=>{cargarBarberos();}).subscribe();
+  chPromos=sb.channel('promos-cambios').on('postgres_changes',{event:'*',schema:'public',table:'promociones'},()=>{cargarPromos();}).subscribe();
+  chCatalogo=sb.channel('catalogo-cambios').on('postgres_changes',{event:'*',schema:'public',table:'catalogo'},()=>{cargarCatalogo();}).subscribe();
+  chConfig=sb.channel('config-cambios').on('postgres_changes',{event:'*',schema:'public',table:'config'},async()=>{
+    const {data:row}=await sb.from('config').select('*').eq('id',1).maybeSingle();
+    if(row){
+      cfg={
+        precioCorte:row.precio_corte??cfg.precioCorte,
+        senaPct:row.sena_pct??cfg.senaPct,
+        redes:{instagram:row.instagram||cfg.redes.instagram,facebook:row.facebook||cfg.redes.facebook,whatsapp:row.whatsapp||cfg.redes.whatsapp},
+        pagos:Object.assign({},cfg.pagos,row.pagos||{}),
+        mpLink:row.mp_link??cfg.mpLink,
+        aliasMp:row.alias_mp??cfg.aliasMp
+      };
+      actualizarInfoPrecio();renderRedesPagos();
+    }
+  }).subscribe();
+})();
+</script>
+</body>
+</html>
